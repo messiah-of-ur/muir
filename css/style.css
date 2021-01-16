@@ -6,7 +6,7 @@
     outline: none;
 }
 
-html, body, .start {
+html, body {
     width: 100%;
     height: 100%;
 }
@@ -15,6 +15,61 @@ body {
     background-image: linear-gradient(-100deg, #a5c6b1 0%, #f4c88c 100%);
     color: #333;
     font-size: 0.875rem;
+}
+
+.posts-header {
+    background-color: #5e6464;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+    align-items: center;
+    height: 3.25rem;
+}
+
+.page-headers {
+    font-size: 2.313rem;
+    font-weight: 100;
+    display: flex;
+    justify-content: center;
+    color: #fff;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+#container {
+    /*display: flex;*/
+    display: none;
+    align-items: flex-start;
+    margin: 0.5rem auto;
+    max-width: 55rem;
+}
+
+.main-content {
+    background-color: #F2FCFD;
+    flex: 1;
+    margin-right: 0.5rem;
+    list-style: none;
+}
+
+.messages-wrapper {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: 4rem;
+    background-color: #F2FCFD;
+    box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.15);
+}
+
+.messages {
+    color: red;
+}
+
+.game-wrapper {
+    height: 10rem;
+    padding: 0 2rem;
+    background-color: #F2FCFD;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.15);
 }
 
 .board-left-wrapper, .board-middle-wrapper, .board-right-wrapper, .board-squares-left {
@@ -38,6 +93,28 @@ body {
     grid-template-rows: 35px 35px 35px;
 }
 
+.circle-background-image {
+    background-image: url("../images/rosette.png");
+    background-size: cover;
+}
+
+.score-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
+}
+
+.current-turn-wrapper {
+    justify-content: space-around;
+}
+
+.bench h4 {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
 .board-squares-left {
     grid-template-columns: 35px 35px 35px 35px;
     grid-template-rows: 35px 35px;
@@ -50,62 +127,72 @@ body {
 }
 
 .board-square {
-    height: 2.2rem;
-    width: 2.2rem;
+    height: 2.3rem;
+    width: 2.3rem;
+
 }
 
-.circle {
-    border-radius: 50%;
+.skip-actions {
+    width: 100%;
+    max-width: 10rem;
+}
+
+.legend {
+    background-color: #FFF;
+    flex: 1;
+    max-width: 18rem;
+}
+
+.legend-information {
+    background-color: #F6F7FE;
+    /* display: flex; */
+    align-items: center;
+    padding: 1rem;
+    /* height: 3.75rem; */
+}
+
+.legend-content {
+    display: flex;
+    margin-right: 1rem;
+    font-weight: 700;
+    margin-top: 1rem;
+}
+
+.legend-content h3 {
+    font-size: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    color: #848694;
+    /* margin-top: 1rem; */
+    margin-left: 2rem;
 }
 
 .legend-square, .circle {
-    height: 2rem;
-    width: 2rem;
+    height: 1.85rem;
+    width: 1.85rem;
     border-style: solid;
 }
 
 .circle {
+    border-radius: 50%;
     border-color: #555;
 }
 
 .empty-circle {
-    background-color: none;
+    background-color: #fff;
 }
 
 .filled-circle {
+    background-color: #000;
+}
+
+.available-circle {
+    border-color: #5f5;
     background-color: #555;
 }
 
-.chosen-circle {
-    font-size: 1.725rem;
-    margin-left: -0.125rem;
-    margin-right: -0.3rem;
-}
-
-.page-headers {
-    font-size: 2.313rem;
-    font-weight: 100;
-    display: flex;
-    justify-content: center;
-    color: #fff;
-    font-family: "Comic Sans MS", "Comic Sans", cursive;
-}
-
-.posts-header {
-    background-color: #5e6464;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
-    align-items: center;
-    height: 3.25rem;
-}
-
-.container {
-    display: flex;
-    align-items: flex-start;
-    margin: 0.5rem auto;
-    max-width: 55rem;
-}
-
-.start {
+#start {
     display: flex;
 }
 
@@ -117,6 +204,7 @@ body {
     padding: 2.5rem;
     max-width: 32rem;
     margin: auto;
+    margin-top: 15%;
     max-height: 90%;
     width: 90%;
 }
@@ -169,76 +257,16 @@ body {
     background-color: #cc883e;
 }
 
-.legend {
-    background-color: #FFF;
-    flex: 1;
-    max-width: 18rem;
-}
-
-.legend-information {
-    background-color: #F6F7FE;
-    /* display: flex; */
-    align-items: center;
-    padding: 1rem;
-    /* height: 3.75rem; */
-}
-
-.legend-content {
-    display: flex;
-    margin-right: 1rem;
-    font-weight: 700;
-    margin-top: 1rem;
-}
-
-.legend-content h3 {
-    font-size: 0.75rem;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    color: #848694;
-    /* margin-top: 1rem; */
-    margin-left: 2rem;
-}
-
-.legend-content p {
-    font-size: 1.125rem;
-    color: #00BFD9;
-}
-
-.main-content {
-    background-color: #FFF;
-    flex: 1;
-    margin-right: 0.5rem;
-    list-style: none;
-}
-
-.post {
-    display: flex;
-    min-height: 7rem;
-    padding-top: 1rem;
-    padding-left: 1rem;
-    padding-bottom: 1rem;
-    box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.15);
-    display: flex;
-    padding-right: 1rem;
-}
-
-.game-wrapper {
-    height: 10rem;
-    padding: 0 2rem;
-    background-color: #F2FCFD;
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    align-items: center;
-    box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.15);
+#plrID {
+    display: none;
 }
 
 @media screen and (max-width: 55.5rem) {
-    .container {
+    #container {
         flex-direction: column;
         width: 90%;
         align-items: stretch;
+        display: "none"
     }
     .legend {
         margin-right: 0;

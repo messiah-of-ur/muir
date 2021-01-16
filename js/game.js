@@ -3,35 +3,30 @@ const rosette = 8
 const escapedField = 15
 canSendTurn = false
 
+let available = []
+let state = []
+let plrID
+let lastPlr = -1
+
+function pageLog(n, message) {
+	document.getElementById("message:" + n).innerHTML = message;
+}
 
 function abs(num) {
-	if (num < 0) return -1*num
+	if (num < 0) return -1 * num
 	else return num
 }
 
-function joinGame(gameID){
-	console.log("Connected to Game "+gameID)
-	return new WebSocket("ws://localhost:8080/join/"+gameID)
+function joinGame(gameID) {
+	console.log("Connected to Game " + gameID)
+	return new WebSocket("ws://localhost:8080/v1/join/" + gameID)
 }
 
-function postGame() {
-	let myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
-	 
-	let raw = JSON.stringify({"key":"my-key"});
-	let res 
-	
-	let requestOptions = {
-	  method: 'POST',
-	  headers: myHeaders,
-	  body: raw,
-	  redirect: 'follow'
-	};
-
-	fetch("http://localhost:8080/game", requestOptions)
-		  .then(response => response.text())
-		  .then(result => {console.log(result); return result})
-		  .catch(error => console.log('error', error))
+function calcNext(curr, roll) {
+	let next = abs(curr)
+	next += roll
+	if (plrID == 1 && (next < 5 || next == 13 || next == 14)) next *= -1
+	return next
 }
 
 function checkMoves(data) {
@@ -39,24 +34,19 @@ function checkMoves(data) {
 
 	for (i = 0; i < numOfPawns; i++) {
 		let bool = true
-		let next = abs(data.playerPawns[plrID][i])
+		let next = calcNext(data.playerPawns[plrID][i], data.roll)
 
-		next += data.roll
-		if (plrID==1 && (next < 5 || next == 13 || next == 14)) next *= -1
-		
-		console.log(plrID, i, next, data.roll)
-
-		for(j = 0; j < numOfPawns; j++) {
-			if (i==j) continue
-			if (next==data.playerPawns[plrID][j]) {
+		for (j = 0; j < numOfPawns; j++) {
+			if (i == j) continue
+			if (next == data.playerPawns[plrID][j]) {
 				bool = false
 				break
 			}
 		}
 
-		if (next==rosette) {
-			for(j = 0; j < numOfPawns; j++) {
-				if (data.playerPawns[1-plrID][j]==rosette) {
+		if (next == rosette) {
+			for (j = 0; j < numOfPawns; j++) {
+				if (data.playerPawns[1 - plrID][j] == rosette) {
 					bool = false
 					break
 				}
@@ -65,7 +55,7 @@ function checkMoves(data) {
 
 		if (next > escapedField) bool = false
 
-		if(bool) available.push(i)
+		if (bool) available.push(i)
 	}
 
 	return available
@@ -73,42 +63,30 @@ function checkMoves(data) {
 
 function playTurn(data) {
 
-	if(data.roll == 0) {
-		let msg = JSON.stringify({
-			pawnID: move,
-		})
-	
-		socket.send(msg)
-	}
+	// if (data.roll == 0) {
+	// 	pageLog(3, "Roll was zero, no turn to play.")
+	// 	setTimeout(console.log("Roll was zero, no turn to play."), 4000)
+	// 	canSendTurn = true;
+	// 	sendMessage(-1)
+	// 	return
+	// }
 
 	available = checkMoves(data)
 	console.log("Available: " + available)
-	console.log(data)
 	canSendTurn = true;
 }
 
-function sendMessage() {
-	if(!canSendTurn) {
+function sendMessage(move) {
+	if (!canSendTurn) {
+		pageLog(3, "Not your turn yet!")
 		console.log("Not your turn yet!")
-		return;
-	}
-
-	let move = parseInt(document.getElementById("plrID").value)
-	let bool = false
-
-	for (i of available) {
-		if(move==i) bool = true
-	} 
-
-	if(!bool) {
-		console.log("Can't move that one!")
 		return;
 	}
 
 	console.log("Mooving that one!")
 
 	let msg = JSON.stringify({
-			pawnID: move,
+		pawnID: move,
 	})
 
 	canSendTurn = false
@@ -116,12 +94,14 @@ function sendMessage() {
 	socket.send(msg)
 }
 
+function skipMove() {
+	setTimeout(pageLog(3, "Status: Skipping move"), 2000)
+	sendMessage(-1)
+}
+
 function mainLoop() {
-	plrID = parseInt(document.getElementById("plrID").value)
-	console.log(plrID);
 	let gameKey = getGameKey()
 	socket = joinGame(gameKey)
-	let state
 
 	socket.onopen = () => {
 		data = JSON.stringify({
@@ -130,38 +110,178 @@ function mainLoop() {
 		})
 		socket.send(data)
 	}
-	  
-	socket.onmessage  = (event) => {
+
+	socket.onmessage = (event) => {
 		console.log("New turn.")
+
+		lastPlr = state.turn
+
 		state = JSON.parse(event.data)
 		console.log(state)
-		if (state.turn==plrID) playTurn(state)
+
+		showScore(state)
+
+		if (state.turn == lastPlr)
+			if (state.turn == plrID) pageLog(3, "You stepped on a Rosette, you get an extra turn.")
+			else pageLog(3, "Opponent stepped on a Rosette, they get an extra turn.")
+		else pageLog(3, "Status: OK")
+
+		pageLog(2, "Roll: " + state.roll)
+		if (state.turn == plrID) {
+			playTurn(state)
+			pageLog(1, "Your turn.")
+		} else pageLog(1, "Opponent's turn.")
+
+		drawBoard(state)
 	}
-	  
-	// socket.onclose = function(event) {
-	// 	if (event.wasClean) {
-	// 	  alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-	// 	} else {
-	// 	  // e.g. server process killed or network down
-	// 	  // event.code is usually 1006 in this case
-	// 	  alert('[close] Connection died');
-	// 	}
-	// };
-	  
-	// socket.onerror = function(error) {
-	// 	alert(`[error] ${error.message}`);
-	// };
 }
 
 function getGameKey() {
-	return "25a65da0-56ba-11eb-bdc1-00d861fbbd1d"
+	return "78a44d83-5816-11eb-94d8-00d861fbbd1d"
 }
 
-mainLoop();
+function startGame() {
+	let main = document.getElementById("container")
+	let login = document.getElementById("start")
+	main.style.display = "flex"
+	login.style.display = "none"
+	mainLoop()
+}
 
-// TODO LIST:
-// client-side move validation
-// send move message 
-// json parser
-// client side authentication
-// automate roll 0
+function movePawn(id) {
+	id = parseInt(id.slice(2))
+	let bool = false
+	let pawnID
+
+	console.log("movePawn: " + id)
+
+	if (!canSendTurn) {
+		console.log("Not your turn yet!")
+		pageLog(3, "Not your turn yet!")
+		return;
+	}
+
+	for (i = 0; i < numOfPawns; i++)
+		if (state.playerPawns[plrID][i] == id) {
+			bool = true
+			pawnID = i
+			break
+		}
+
+	console.log("pawnID: " + pawnID)
+
+	if (!bool) {
+		pageLog(3, "This pawn isn't yours.")
+		console.log("This pawn isn't yours.")
+		return;
+	}
+
+	if (available.indexOf(pawnID) == -1) {
+		pageLog(3, "Can't move this pawn.")
+		console.log("Can't move this pawn.")
+		return;
+	}
+
+	sendMessage(pawnID)
+}
+
+function initPawn(id) {
+	id = parseInt(id.slice(2)) - 1
+
+	if (!canSendTurn) {
+		console.log("Not your turn yet!")
+		console.log("Not your turn yet!")
+		return;
+	}
+
+	if (available.indexOf(id) == -1) {
+		pageLog(3, "Can't move this pawn.")
+		console.log("Can't move this pawn.")
+		return;
+	}
+
+	sendMessage(id)
+}
+
+function drawBoard(state) {
+	let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, -1, -2, -3, -4, -13, -14]
+
+	let border = "#555"
+	let availableBorder = "#5f5"
+
+	array.forEach(function (element) {
+		let id = "B:" + element
+		let elem = document.getElementById(id)
+		elem.style.display = "none"
+	})
+
+	for (i = 1; i <= numOfPawns; i++) {
+		let id = "S:" + i
+		let elem = document.getElementById(id)
+		elem.style.display = "none"
+	}
+
+	for (i = 0; i < 2; i++) {
+		let color;
+		if (i == 0) color = "#fff"
+		else color = "#000"
+
+		for (j = 0; j < numOfPawns; j++) {
+			let zone = state.playerPawns[i][j]
+			if (zone == 0 && i == plrID) {
+				let elem = document.getElementById("S:" + (j + 1))
+				elem.style.display = "block"
+				elem.style.backgroundColor = color
+				if (state.turn == plrID && i == plrID && available.indexOf(j) != -1) elem.style.borderColor = availableBorder
+				else elem.style.borderColor = border
+			}
+			else if (zone != 0 && zone != 15) {
+				let elem = document.getElementById("B:" + zone)
+				elem.style.display = "block"
+				elem.style.backgroundColor = color
+				if (state.turn == plrID && i == plrID && available.indexOf(j) != -1) elem.style.borderColor = availableBorder
+				else elem.style.borderColor = border
+			}
+		}
+	}
+}
+
+function showScore(state) {
+	let score = [0, 0]
+	for (i = 0; i < 2; i++)
+		for (j = 0; j < state.numOfPawns; j++) {
+			if (state.playerPawns[i][j] == 15)
+				score[i]++;
+		}
+	document.getElementById("score").innerHTML = "Score - You: " + score[plrID] + ", Opponent: " + score[1 - plrID]
+}
+
+function initBoard() {
+	plrID = parseInt(document.getElementById("plrID").value)
+	console.log(plrID);
+	state.turn = -1
+
+	let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, -1, -2, -3, -4, -13, -14]
+
+	array.forEach(function (element) {
+		let elem = document.getElementById("B:" + element)
+		elem.style.display = "none"
+		elem.addEventListener("click", function () { movePawn(this.id) })
+	})
+
+	for (i = 1; i <= numOfPawns; i++) {
+		let elem = document.getElementById("S:" + i)
+		elem.style.display = "none"
+		elem.addEventListener("click", function () { initPawn(this.id) })
+	}
+
+	let elem = document.getElementById("white-pawn")
+	if (plrID == 0) elem.innerHTML = "Your pawns";
+	else elem.innerHTML = "Opponent's pawns"
+
+	elem = document.getElementById("black-pawn")
+	if (plrID == 1) elem.innerHTML = "Your pawns";
+	else elem.innerHTML = "Opponent's pawns"
+}
+
+initBoard()
