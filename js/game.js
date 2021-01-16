@@ -37,8 +37,8 @@ function checkMoves(data) {
 		let next = calcNext(data.playerPawns[plrID][i], data.roll)
 
 		for (j = 0; j < numOfPawns; j++) {
-			if (i == j) continue
-			if (next == data.playerPawns[plrID][j]) {
+			//if (i == j) continue
+			if (next != 15 && next == data.playerPawns[plrID][j]) {
 				bool = false
 				break
 			}
@@ -124,6 +124,7 @@ function mainLoop() {
 		if (state.turn == lastPlr)
 			if (state.turn == plrID) pageLog(3, "You stepped on a Rosette, you get an extra turn.")
 			else pageLog(3, "Opponent stepped on a Rosette, they get an extra turn.")
+		else if (state.roll == 0) pageLog(3, "Roll was zero, turn must be skipped.")
 		else pageLog(3, "Status: OK")
 
 		pageLog(2, "Roll: " + state.roll)
@@ -134,13 +135,26 @@ function mainLoop() {
 
 		drawBoard(state)
 	}
+
+	socket.onclose = (event) => {
+		alert("Connection timed out!")
+		location.reload()
+	}
 }
 
 function getGameKey() {
-	return "78a44d83-5816-11eb-94d8-00d861fbbd1d"
+	return "312503b5-5835-11eb-b3f0-00d861fbbd1d"
 }
 
 function startGame() {
+	let nick = document.getElementById("nickname-input").value
+
+	if (!nick) {
+		alert("Insert a nickname!")
+		return
+	}
+
+
 	let main = document.getElementById("container")
 	let login = document.getElementById("start")
 	main.style.display = "flex"
@@ -206,8 +220,8 @@ function initPawn(id) {
 function drawBoard(state) {
 	let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, -1, -2, -3, -4, -13, -14]
 
-	let border = "#555"
-	let availableBorder = "#5f5"
+	let border = "#424242"
+	let availableBorder = "#d35400"
 
 	array.forEach(function (element) {
 		let id = "B:" + element
@@ -249,11 +263,17 @@ function drawBoard(state) {
 function showScore(state) {
 	let score = [0, 0]
 	for (i = 0; i < 2; i++)
-		for (j = 0; j < state.numOfPawns; j++) {
+		for (j = 0; j < numOfPawns; j++) {
 			if (state.playerPawns[i][j] == 15)
 				score[i]++;
 		}
 	document.getElementById("score").innerHTML = "Score - You: " + score[plrID] + ", Opponent: " + score[1 - plrID]
+
+	if(score[plrID]==numOfPawns)
+	{
+		alert("Congratulations, you win!")
+		location.reload()
+	}
 }
 
 function initBoard() {

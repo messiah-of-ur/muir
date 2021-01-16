@@ -20,6 +20,11 @@
                 <h3 class="messages" id="message:2">Waiting for other player</h3>
                 <h3 class="messages" id="message:3">...</h3>
             </div>
+            <hr>
+            <div class="score-wrapper">
+                <h3 id="score">Score - You: 0, Opponent: 0</h3>
+            </div>
+            <hr>
             <header class="game-wrapper">
                 <div class="board-left-wrapper">
                     <div class="square board-square"><div class="circle" id="B:-4"></div></div>
@@ -48,9 +53,7 @@
                     <div class="square board-square"><div class="circle" id="B:13"></div></div>
                 </div>
             </header>
-            <div class="score-wrapper">
-                <h3 id="score">Score</h3>
-            </div>
+            <hr>
             <div class="game-wrapper current-turn-wrapper">
                 <div class="bench">
                     <h4>Bench</h4>
@@ -78,7 +81,7 @@
             <div class="legend-information">
                 <div class="legend-content">
                     <div class="square legend-square"></div>
-                    <h3>position</h3>
+                    <h3>Zones</h3>
                 </div>
                 <div class="legend-content">
                     <div class="circle empty-circle"></div>
@@ -90,21 +93,26 @@
                 </div>
                 <div class="legend-content">
                     <div class="circle available-circle"></div>
-                    <h3>available to move</h3>
+                    <h3>Pawns available to move</h3>
                 </div>
             </div>
         </aside>
     </main>
 
     <div id="start" name="auth-form" class="start-form">
-            <h2 class="start-title">Messiah of Ur</h2>
+            <h2 class="start-title">Join a game!</h2>
 
-            <input type="nickname" name="nickname" placeholder="Enter your nickname" class="nickname-input" required="required" />
+            <input type="nickname" name="nickname" placeholder="Enter your nickname" id="nickname-input"/>
 
             <div class="start-actions">
                 <button class="start-button" onclick="startGame();">Play</button>
             </div>
     </div>
+
+    <footer class="footer">
+        <p>Github page: <a href="https://github.com/messiah-of-ur">https://github.com/messiah-of-ur</a></p>
+        <p>MUR developped by: Ivan Hristov (62130), Dimitar Lazarov (62134) & Georgi Atanasov (62189)</p>
+    </footer>
 
     <input id="plrID" value=1 type="number"></input>
 
