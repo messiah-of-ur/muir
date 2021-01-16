@@ -27,7 +27,7 @@
             <hr>
             <header class="game-wrapper">
                 <div class="board-left-wrapper">
-                    <div class="square board-square"><div class="circle" id="B:-4"></div></div>
+                    <div class="square board-square circle-background-image"><div class="circle" id="B:-4"></div></div>
                     <div class="square board-square"><div class="circle" id="B:-3"></div></div>
                     <div class="square board-square"><div class="circle" id="B:-2"></div></div>
                     <div class="square board-square"><div class="circle" id="B:-1"></div></div>
@@ -35,7 +35,7 @@
                     <div class="square board-square"><div class="circle" id="B:6"></div></div>
                     <div class="square board-square"><div class="circle" id="B:7"></div></div>
                     <div class="square board-square circle-background-image"><div class="circle" id="B:8"></div></div>
-                    <div class="square board-square"><div class="circle" id="B:4"></div></div>
+                    <div class="square board-square circle-background-image"><div class="circle" id="B:4"></div></div>
                     <div class="square board-square"><div class="circle" id="B:3"></div></div>
                     <div class="square board-square"><div class="circle" id="B:2"></div></div>
                     <div class="square board-square"><div class="circle" id="B:1"></div></div>
@@ -45,11 +45,11 @@
                     <div class="square board-square"><div class="circle" id="B:10"></div></div>
                 </div>
                 <div class="board-right-wrapper">
-                    <div class="square board-square"><div class="circle" id="B:-14"></div></div>
+                    <div class="square board-square circle-background-image"><div class="circle" id="B:-14"></div></div>
                     <div class="square board-square"><div class="circle" id="B:-13"></div></div>
                     <div class="square board-square"><div class="circle" id="B:11"></div></div>
                     <div class="square board-square"><div class="circle" id="B:12"></div></div>
-                    <div class="square board-square"><div class="circle" id="B:14"></div></div>
+                    <div class="square board-square circle-background-image"><div class="circle" id="B:14"></div></div>
                     <div class="square board-square"><div class="circle" id="B:13"></div></div>
                 </div>
             </header>
@@ -84,6 +84,10 @@
                     <h3>Zones</h3>
                 </div>
                 <div class="legend-content">
+                    <div class="square legend-square circle-background-image"></div>
+                    <h3>Rosette Zone</h3>
+                </div>
+                <div class="legend-content">
                     <div class="circle empty-circle"></div>
                     <h3 id="white-pawn">white pawn</h3>
                 </div>
@@ -99,15 +103,25 @@
         </aside>
     </main>
 
-    <div id="start" name="auth-form" class="start-form">
+    <div id="landing">
+        <div id="start" name="auth-form" class="start-form">
             <h2 class="start-title">Join a game!</h2>
-
+    
             <input type="nickname" name="nickname" placeholder="Enter your nickname" id="nickname-input"/>
-
+    
             <div class="start-actions">
-                <button class="start-button" onclick="startGame();">Play</button>
+                   <button class="start-button" onclick="startGame();">Play</button>
             </div>
+        </div>
+
+        <br><br>
+        <p>An information video for the Royal game of Ur</p>
+        <p>Served as an insight into the game, as well as an inspiration for this project.</p>
+        <br><br>
+        <iframe id='landing-video' width="480" height="270" src="https://www.youtube.com/embed/WZskjLq040I" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
+
+    
 
     <footer class="footer">
         <p>Github page: <a href="https://github.com/messiah-of-ur">https://github.com/messiah-of-ur</a></p>

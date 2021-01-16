@@ -23,7 +23,6 @@ body {
 }
 
 .posts-header {
-    /* background-color: #000; */
     align-items: center;
     height: 3.25rem;
 }
@@ -38,7 +37,6 @@ body {
 }
 
 #container {
-    /*display: flex;*/
     display: none;
     align-items: flex-start;
     margin: 1rem auto;
@@ -62,7 +60,8 @@ hr {
 }
 
 .messages-wrapper {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 5rem;
@@ -158,7 +157,7 @@ hr {
 }
 
 .legend .posts-header {
-    height: 5.65rem;
+    height: 5rem;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -183,7 +182,6 @@ hr {
     justify-content: center;
     display: flex;
     color: #424242;
-    /* margin-top: 1rem; */
     margin-left: 2rem;
 }
 
@@ -215,6 +213,20 @@ hr {
     display: flex;
 }
 
+#landing {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 5rem;
+    color: #fff;
+}
+
+#landing-video {
+    align-content: center;
+}
+
 input {
     background-color: #ecf0f1;
 }
@@ -222,12 +234,12 @@ input {
 .start-form {
     border-radius: 0.5rem;
     background-color: #ecf0f1;
-    display: flex;
+    display: block;
     flex-direction: column;
     padding: 2.5rem;
     max-width: 32rem;
     margin: auto;
-    margin-top: 15%;
+    margin-top: 5%;
     max-height: 90%;
     width: 90%;
 }

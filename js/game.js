@@ -143,7 +143,7 @@ function mainLoop() {
 }
 
 function getGameKey() {
-	return "312503b5-5835-11eb-b3f0-00d861fbbd1d"
+	return "f60dc07d-5845-11eb-965d-00d861fbbd1d"
 }
 
 function startGame() {
@@ -156,9 +156,9 @@ function startGame() {
 
 
 	let main = document.getElementById("container")
-	let login = document.getElementById("start")
+	let landing = document.getElementById("landing")
 	main.style.display = "flex"
-	login.style.display = "none"
+	landing.style.display = "none"
 	mainLoop()
 }
 
