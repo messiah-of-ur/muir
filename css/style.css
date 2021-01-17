@@ -229,6 +229,11 @@ hr {
     width: 100%;
 }
 
+#leaderboard td,th {
+    text-align: left;
+    vertical-align: middle;
+}
+
 #form-and-video {
     display: flex;
     flex-direction: column;

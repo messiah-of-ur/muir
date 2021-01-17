@@ -11,16 +11,32 @@ let lastPlr = -1
 function leaderLog(items) {
 	const table = document.getElementById("leaderboard");
 
+	console.log(items)
 	items.forEach(item => {
 		let row = table.insertRow();
 
-		let firstName = row.insertCell(0);
-		let lastName = row.insertCell(1);
-		let age = row.insertCell(2);
-		firstName.innerHTML = item.firstName;
-		lastName.innerHTML = item.lastName;
-		age.innerHTML = item.age;
+		let player0 = row.insertCell(0);
+		let player1 = row.insertCell(1);
+		let winner = row.insertCell(2);
+
+		player0.innerHTML = item.player0;
+		player1.innerHTML = item.player1;
+		winner.innerHTML = item.winner;
 	});
+}
+
+function fillLeaderboard() {
+	let requestOptions = {
+		method: 'GET',
+		redirect: 'follow'
+	};
+
+	fetch("http://localhost:8080/murabi/v1/history", requestOptions)
+		.then(response => response.json())
+		.then(result => {
+			leaderLog(result.matches)
+		})
+		.catch(error => console.log('error', error));
 }
 
 function pageLog(n, message) {
@@ -156,12 +172,12 @@ function mainLoop(gameData) {
 }
 
 function createGame(name) {
-	let data = JSON.stringify({"nickname":name});
+	let data = JSON.stringify({ "nickname": name });
 
 	var xhr = new XMLHttpRequest();
 
-	xhr.addEventListener("readystatechange", function() {
-		if(this.readyState === 4) {
+	xhr.addEventListener("readystatechange", function () {
+		if (this.readyState === 4) {
 			console.log(this.responseText);
 		}
 	});
@@ -333,6 +349,8 @@ function initBoard() {
 		elem.style.display = "none"
 		elem.addEventListener("click", function () { initPawn(this.id) })
 	}
+
+	fillLeaderboard()
 }
 
 initBoard()
