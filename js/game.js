@@ -8,6 +8,22 @@ let state = []
 let plrID
 let lastPlr = -1
 
+//loadTableData(items);
+function leaderLog(items) {
+	const table = document.getElementById("leaderboard");
+
+	items.forEach(item => {
+		let row = table.insertRow();
+
+		let firstName = row.insertCell(0);
+		let lastName = row.insertCell(1);
+		let age = row.insertCell(2);
+		firstName.innerHTML = item.firstName;
+		lastName.innerHTML = item.lastName;
+		age.innerHTML = item.age;
+	});
+}
+
 function pageLog(n, message) {
 	document.getElementById("message:" + n).innerHTML = message;
 }
@@ -137,6 +153,14 @@ function mainLoop() {
 	}
 
 	socket.onclose = (event) => {
+		if (state.turn == plrID) {
+			alert("Congratulations, you win!")
+			location.reload()
+		}
+		if (state.turn == 1 - plrID) {
+			alert("You lose!")
+			location.reload()
+		}
 		alert("Connection timed out!")
 		location.reload()
 	}
@@ -268,12 +292,6 @@ function showScore(state) {
 				score[i]++;
 		}
 	document.getElementById("score").innerHTML = "Score - You: " + score[plrID] + ", Opponent: " + score[1 - plrID]
-
-	if(score[plrID]==numOfPawns)
-	{
-		alert("Congratulations, you win!")
-		location.reload()
-	}
 }
 
 function initBoard() {

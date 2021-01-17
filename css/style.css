@@ -5,21 +5,21 @@
  
 * {
     box-sizing: border-box;
+    outline: none;
+    font-family: Yusei, sans-serif;
     margin: 0;
     padding: 0;
-    font-family: Yusei, sans-serif;
-    outline: none;
 }
 
 html, body {
-    width: 100%;
     height: 100%;
+    width: 100%;
 }
 
 body {
     background-image: url("../images/double-bubble-dark.png");
-    color: #333;
     font-size: 0.875rem;
+    color: #333;
 }
 
 .posts-header {
@@ -28,12 +28,12 @@ body {
 }
 
 .page-headers {
-    font-size: 2.313rem;
-    font-weight: 100;
     display: flex;
     justify-content: center;
-    color: #ecf0f1;
+    font-size: 2.313rem;
+    font-weight: 100;
     font-family: Yusei;
+    color: #ecf0f1;
 }
 
 #container {
@@ -43,20 +43,12 @@ body {
     max-width: 55rem;
 }
 
-hr {
-    border: 1px solid #424242;
-    background-color: #424242;
-    margin: 0.5rem;
-    margin-left: 2rem;
-    margin-right: 2rem;
-}
-
 .main-content {
+    flex: 1;
+    list-style: none;
     border-radius: 0.5rem;
     background-color: #ecf0f1;
-    flex: 1;
     margin-right: 0.5rem;
-    list-style: none;
 }
 
 .messages-wrapper {
@@ -67,17 +59,30 @@ hr {
     height: 5rem;
 }
 
+hr {
+    background-color: #424242;
+    border: 1px solid #424242;
+    margin: 0.5rem 2rem 0.5rem 2rem;
+}
+
 .messages {
     color: #333;
 }
 
-.game-wrapper {
-    height: 10rem;
-    padding: 0 2rem;
+.score-wrapper {
     display: flex;
     justify-content: center;
+    align-items: center;
+    height: 2rem;
+}
+
+.game-wrapper {
+    display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
+    height: 10rem;
+    padding: 0 2rem;
 }
 
 .board-left-wrapper, .board-middle-wrapper, .board-right-wrapper, .board-squares-left {
@@ -106,11 +111,15 @@ hr {
     background-size: cover;
 }
 
-.score-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 2rem;
+.square {
+    background-color: none;
+    border-style: solid;
+    border-color: #424242;
+}
+
+.board-square {
+    height: 2.3rem;
+    width: 2.3rem;
 }
 
 .current-turn-wrapper {
@@ -128,28 +137,16 @@ hr {
     grid-template-rows: 35px 35px;
 }
 
-.square {
-    background-color: none;
-    border-style: solid;
-    border-color: #424242;
-}
-
-.board-square {
-    height: 2.3rem;
-    width: 2.3rem;
-
-}
-
 .skip-actions {
     width: 100%;
     max-width: 10rem;
 }
 
 .legend {
-    background-color: #ecf0f1;
     flex: 1;
-    max-width: 18rem;
     border-radius: 0.5rem;
+    background-color: #ecf0f1;
+    max-width: 18rem;
 }
 
 .legend .page-headers {
@@ -157,38 +154,36 @@ hr {
 }
 
 .legend .posts-header {
-    height: 5rem;
+    display: flex;
     align-items: center;
     justify-content: center;
-    display: flex;
+    height: 5rem;
 }
 
 .legend-information {
     align-items: center;
-    padding: 2rem;
-    padding-top: 1rem;
+    padding: 1rem 2rem 2rem 2rem;
 }
 
 .legend-content {
     display: flex;
-    margin-right: 1rem;
-    font-weight: 700;
     margin-top: 1rem;
+    font-weight: 700;
 }
 
 .legend-content h3 {
-    font-size: 0.75rem;
+    display: flex;
     align-items: center;
     justify-content: center;
-    display: flex;
     color: #424242;
+    font-size: 0.75rem;
     margin-left: 2rem;
 }
 
 .legend-square, .circle {
+    border-style: solid;
     height: 1.85rem;
     width: 1.85rem;
-    border-style: solid;
 }
 
 .circle {
@@ -215,12 +210,33 @@ hr {
 
 #landing {
     display: flex;
+    justify-content: center;
+    margin-top: 1%;
+}
+
+#game-results {
+    border-radius: 0.5rem;
+    background-color: #ecf0f1;
+    width: 100%;
+    max-width: 32rem;
+    height: 43.9rem;
+    max-height: 80%;
+    margin: 1rem;
+    padding: 2.5rem;
+}
+
+#leaderboard {
+    width: 100%;
+}
+
+#form-and-video {
+    display: flex;
     flex-direction: column;
-    align-content: center;
     align-items: center;
     justify-content: center;
-    padding-bottom: 5rem;
     color: #fff;
+    margin: 1rem;
+    padding-bottom: 5rem;
 }
 
 #landing-video {
@@ -232,33 +248,31 @@ input {
 }
 
 .start-form {
+    flex-direction: column;
     border-radius: 0.5rem;
     background-color: #ecf0f1;
-    display: block;
-    flex-direction: column;
-    padding: 2.5rem;
-    max-width: 32rem;
-    margin: auto;
-    margin-top: 5%;
     max-height: 90%;
-    width: 90%;
+    width: 100%;
+    max-width: 32rem;
+    margin: 0;
+    padding: 2.5rem;
 }
 
 .start-title {
     color: #424242;
     font-size: 1.5rem;
     font-weight: 400;
-    margin-bottom: 3.5rem;
     max-width: 100%;
+    margin-bottom: 3.5rem;
 }
 
 #nickname-input {
+    height: 2.5rem;
+    width: 100%;
     border: none;
     border-bottom: 1px solid #424242;
     font-size: 0.875rem;
     margin-bottom: 1rem;
-    height: 2.5rem;
-    width: 100%;
 }
 
 #nickname-input:focus {
@@ -267,22 +281,19 @@ input {
 
 .start-actions {
     align-self: flex-end;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 3rem;
     width: 100%;
     max-width: 10rem;
+    margin-top: 3rem;
 }
 
 .start-button {
-    background-color: #424242;
     border: none;
     border-radius: 0.5rem;
+    background-color: #424242;
     color: #ecf0f1;
     cursor: pointer;
-    font-size: 1rem;
     text-align: center;
+    font-size: 1rem;
     height: 2.375rem;
     width: 100%;
 }
@@ -292,15 +303,14 @@ input {
 }
 
 .footer {
-    position: fixed;
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
-    /* background-color: #000; */
-    bottom: 0;
     height: 3rem;
+    bottom: 0;
     color: #ecf0f1;
 }
 
@@ -311,14 +321,17 @@ a:hover, a:active { color:#ffffff }
     display: none;
 }
 
-@media screen and (max-width: 55.5rem) {
+@media screen and (max-width: 60rem) {
     #container {
         flex-direction: column;
-        width: 90%;
         align-items: stretch;
-        display: "none"
+        display: "none";
+        width: 90%;
     }
     .legend {
         margin-right: 0;
+    }
+    #landing {
+        display: grid;
     }
 }
