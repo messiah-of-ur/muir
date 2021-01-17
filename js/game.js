@@ -8,7 +8,6 @@ let state = []
 let plrID
 let lastPlr = -1
 
-//loadTableData(items);
 function leaderLog(items) {
 	const table = document.getElementById("leaderboard");
 
@@ -33,9 +32,9 @@ function abs(num) {
 	else return num
 }
 
-function joinGame(gameID) {
-	console.log("Connected to Game " + gameID)
-	return new WebSocket("ws://localhost:8080/v1/join/" + gameID)
+function joinGame(gameData) {
+	console.log("Connected to Game " + gameData.gameID)
+	return new WebSocket("ws://" + gameData.murkerAddr + "/v1/join/" + gameData.gameID)
 }
 
 function calcNext(curr, roll) {
@@ -78,15 +77,6 @@ function checkMoves(data) {
 }
 
 function playTurn(data) {
-
-	// if (data.roll == 0) {
-	// 	pageLog(3, "Roll was zero, no turn to play.")
-	// 	setTimeout(console.log("Roll was zero, no turn to play."), 4000)
-	// 	canSendTurn = true;
-	// 	sendMessage(-1)
-	// 	return
-	// }
-
 	available = checkMoves(data)
 	console.log("Available: " + available)
 	canSendTurn = true;
@@ -115,14 +105,13 @@ function skipMove() {
 	sendMessage(-1)
 }
 
-function mainLoop() {
-	let gameKey = getGameKey()
-	socket = joinGame(gameKey)
+function mainLoop(gameData) {
+	socket = joinGame(gameData)
 
 	socket.onopen = () => {
 		data = JSON.stringify({
-			key: "my-key",
-			playerID: plrID,
+			key: gameData.key,
+			playerID: gameData.playerID,
 		})
 		socket.send(data)
 	}
@@ -166,8 +155,27 @@ function mainLoop() {
 	}
 }
 
-function getGameKey() {
-	return "f60dc07d-5845-11eb-965d-00d861fbbd1d"
+function createGame(name) {
+	let data = JSON.stringify({"nickname":name});
+
+	var xhr = new XMLHttpRequest();
+
+	xhr.addEventListener("readystatechange", function() {
+		if(this.readyState === 4) {
+			console.log(this.responseText);
+		}
+	});
+
+	xhr.withCredentials = false;
+	xhr.open("POST", "http://localhost:8080/murabi/v1/game", false);
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.send(data);
+
+	return JSON.parse(xhr.response);
+}
+
+function getGameID() {
+	return "85980270-58c0-11eb-a3a2-3e22fb434d0e"
 }
 
 function startGame() {
@@ -178,12 +186,27 @@ function startGame() {
 		return
 	}
 
-
 	let main = document.getElementById("container")
 	let landing = document.getElementById("landing")
 	main.style.display = "flex"
 	landing.style.display = "none"
-	mainLoop()
+
+	let createResp = createGame(nick)
+
+	plrID = createResp.playerID
+
+	changeLegend()
+	mainLoop(createResp)
+}
+
+function changeLegend() {
+	let elem = document.getElementById("white-pawn")
+	if (plrID == 0) elem.innerHTML = "Your pawns";
+	else elem.innerHTML = "Opponent's pawns"
+
+	elem = document.getElementById("black-pawn")
+	if (plrID == 1) elem.innerHTML = "Your pawns";
+	else elem.innerHTML = "Opponent's pawns"
 }
 
 function movePawn(id) {
@@ -295,8 +318,6 @@ function showScore(state) {
 }
 
 function initBoard() {
-	plrID = parseInt(document.getElementById("plrID").value)
-	console.log(plrID);
 	state.turn = -1
 
 	let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, -1, -2, -3, -4, -13, -14]
@@ -312,14 +333,6 @@ function initBoard() {
 		elem.style.display = "none"
 		elem.addEventListener("click", function () { initPawn(this.id) })
 	}
-
-	let elem = document.getElementById("white-pawn")
-	if (plrID == 0) elem.innerHTML = "Your pawns";
-	else elem.innerHTML = "Opponent's pawns"
-
-	elem = document.getElementById("black-pawn")
-	if (plrID == 1) elem.innerHTML = "Your pawns";
-	else elem.innerHTML = "Opponent's pawns"
 }
 
 initBoard()
